@@ -1,20 +1,120 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
+using TMPro;
+using Unity.Netcode.Transports.UTP;
 
 public class LoginManager : MonoBehaviour
 {
-  // Start is called before the first frame update
+  public TMP_InputField userNameInputField;
+  UnityTransport transport;
+  public TMP_Dropdown skinSelector;
+  public List<Material> statusObjectColor;
+  public GameObject loginPannel;
+  public GameObject leaveButton;
+  // public GameObject scorePanel;
+  public List<GameObject> spawnPoint;
+  public List<uint> AlternativePlayerPrefabs;
+
+
   void Start()
   {
-
+    NetworkManager.Singleton.OnServerStarted += HandleServerStarted;
+    NetworkManager.Singleton.OnClientConnectedCallback += HandleClientConnected;
+    NetworkManager.Singleton.OnClientDisconnectCallback += HandleClientDisconnect;
+    SetUIVisible(false);
+  }
+  public void SetUIVisible(bool isUserLogin)
+  {
+    if (isUserLogin)
+    {
+      loginPannel.SetActive(false);
+      // scorePanel.SetActive(true);
+      leaveButton.SetActive(true);
+    }
+    else
+    {
+      loginPannel.SetActive(true);
+      // scorePanel.SetActive(false);
+      leaveButton.SetActive(false);
+    }
   }
 
-  // Update is called once per frame
-  void Update()
+  private void HandleClientDisconnect(ulong clientId)
   {
+    Debug.Log("HandleClientDisconnect client ID = " + clientId);
+    if (NetworkManager.Singleton.IsHost) { }
+    else if (NetworkManager.Singleton.IsHost) { leaveButtonFunc(); }
+  }
 
+  private void HandleClientConnected(ulong clientId)
+  {
+    Debug.Log("HandleClientConnect client ID = " + clientId);
+    if (clientId == NetworkManager.Singleton.LocalClientId)
+    {
+      SetUIVisible(true);
+    }
+
+  }
+  public void leaveButtonFunc()
+  {
+    if (NetworkManager.Singleton.IsHost)
+    {
+      NetworkManager.Singleton.Shutdown();
+      NetworkManager.Singleton.ConnectionApprovalCallback -= ApprovalCheck;
+    }
+    else if (NetworkManager.Singleton.IsClient)
+    {
+      NetworkManager.Singleton.Shutdown();
+    }
+    SetUIVisible(false);
+  }
+
+  private void HandleServerStarted()
+  {
+    Debug.Log("HandleServerStart");
+  }
+
+  private void OnDestroy()
+  {
+    if (NetworkManager.Singleton == null) { return; }
+    NetworkManager.Singleton.OnServerStarted -= HandleServerStarted;
+    NetworkManager.Singleton.OnClientConnectedCallback -= HandleClientConnected;
+    NetworkManager.Singleton.OnClientDisconnectCallback -= HandleClientDisconnect;
+  }
+  // private void setIpAddress()
+  // {
+  //   transport = NetworkManager.Singleton.GetComponent<UnityTransport>();
+  //   ipAddress = ipInputField.GetComponent<TMP_InputField>().text;
+  //   transport.ConnectionData.Address = ipAddress;
+  // }
+  public async void Host()
+  {
+    if (RelayManagerScript.Instance.IsRelayEnabled)
+    {
+      await RelayManagerScript.Instance.CreateRelay();
+    }
+    // setIpAddress();
+    NetworkManager.Singleton.ConnectionApprovalCallback = ApprovalCheck;
+    NetworkManager.Singleton.StartHost();
+
+    Debug.Log("start host");
+  }
+  public TMP_InputField joinCodeInputField;
+  public string joinCode;
+  public async void Client()
+  {
+    // setIpAddress();
+    joinCode = joinCodeInputField.GetComponent<TMP_InputField>().text;
+    if (RelayManagerScript.Instance.IsRelayEnabled && !string.IsNullOrEmpty(joinCode))
+    {
+      await RelayManagerScript.Instance.JoinRelay(joinCode);
+    }
+    string userName = userNameInputField.GetComponent<TMP_InputField>().text;
+    int playerSkin = skinSelected();
+    NetworkManager.Singleton.NetworkConfig.ConnectionData = System.Text.Encoding.ASCII.GetBytes(userName + ":" + playerSkin);
+    NetworkManager.Singleton.StartClient();
+    Debug.Log("start client");
   }
   private void ApprovalCheck(NetworkManager.ConnectionApprovalRequest request, NetworkManager.ConnectionApprovalResponse response)
   {
@@ -29,19 +129,19 @@ public class LoginManager : MonoBehaviour
     {
       string rawData = System.Text.Encoding.ASCII.GetString(connectionData, 0, byteLength);
       string[] informationSplit = rawData.Split(":");
-      // string hostData = userNameInputField.GetComponent<TMP_InputField>().text;
-      // string usernameClient = informationSplit[0];
-      // int passcodeClient = int.Parse(informationSplit[1]);
-      // int SkinSelect = int.Parse(informationSplit[2]);
-      // Debug.Log(SkinSelect);
-      // isApprove = ApproveConnection(usernameClient, hostData, passcodeClient);
-      // response.PlayerPrefabHash = AlternativePlayerPrefabs[SkinSelect];
+      string hostData = userNameInputField.GetComponent<TMP_InputField>().text;
+      string usernameClient = informationSplit[0];
+      int passcodeClient = int.Parse(informationSplit[1]);
+      int SkinSelect = int.Parse(informationSplit[2]);
+      Debug.Log(SkinSelect);
+      isApprove = ApproveConnection(usernameClient, hostData, passcodeClient);
+      response.PlayerPrefabHash = AlternativePlayerPrefabs[SkinSelect];
     }
     else
     {
       if (NetworkManager.Singleton.IsHost)
       {
-        // response.PlayerPrefabHash = AlternativePlayerPrefabs[skinSelected()];
+        response.PlayerPrefabHash = AlternativePlayerPrefabs[skinSelected()];
       }
     }
     // Your approval logic determines the following values
@@ -54,7 +154,7 @@ public class LoginManager : MonoBehaviour
 
     // Rotation to spawn the player object (if null it uses the default of Quaternion.identity)
     response.Rotation = Quaternion.identity;
-    // setSpawnLocation(clientId, response);
+    setSpawnLocation(clientId, response);
 
     // If response.Approved is false, you can provide a message that explains the reason why via ConnectionApprovalResponse.Reason
     // On the client-side, NetworkManager.DisconnectReason will be populated with this message via DisconnectReasonMessage
@@ -63,5 +163,54 @@ public class LoginManager : MonoBehaviour
     // If additional approval steps are needed, set this to true until the additional steps are complete
     // once it transitions from true to false the connection approval response will be processed.
     response.Pending = false;
+  }
+  private void setSpawnLocation(ulong clientId,
+  NetworkManager.ConnectionApprovalResponse response)
+  {
+    Vector3 spawnPos = Vector3.zero;
+    Quaternion spawnRo = Quaternion.identity;
+    if (clientId == NetworkManager.Singleton.LocalClientId)
+    {
+      GameObject selectSpawn = spawnPoint[0];
+      spawnPos = selectSpawn.transform.position;
+      spawnRo = selectSpawn.transform.rotation;
+    }
+    else
+    {
+      GameObject selectSpawn = spawnPoint[1];
+      spawnPos = selectSpawn.transform.position;
+      spawnRo = selectSpawn.transform.rotation;
+    }
+    response.Position = spawnPos;
+    response.Rotation = spawnRo;
+
+  }
+
+  public bool ApproveConnection(string clientUsername, string hostUsername, int passcode)
+  {
+    bool isApprove = System.String.Equals(clientUsername.Trim(), hostUsername.Trim()) ? false : true;
+    return isApprove;
+
+  }
+  public int skinSelected()
+  {
+    if (skinSelector.GetComponent<TMP_Dropdown>().value == 0)
+    {
+      return 0;
+    }
+    else if (skinSelector.GetComponent<TMP_Dropdown>().value == 1)
+    {
+      return 1;
+    }
+    else if (skinSelector.GetComponent<TMP_Dropdown>().value == 2)
+    {
+      return 2;
+    }
+    else if (skinSelector.GetComponent<TMP_Dropdown>().value == 3)
+    {
+      return 3;
+    }
+    return 0;
+
   }
 }
