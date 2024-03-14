@@ -224,7 +224,7 @@ MonoBehaviour:
   spawnPoint:
   - {fileID: 722961921}
   - {fileID: 1509815304}
-  AlternativePlayerPrefabs: 
+  AlternativePlayerPrefabs: 4dad759110057056
   joinCodeInputField: {fileID: 1119672366}
   joinCode: 
 --- !u!4 &199686209
@@ -670,6 +670,16 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: 1778629639123319809, guid: 527d154f23f21554283c3affa2a46312,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 199686208}
+    - target: {fileID: 1778629639123319809, guid: 527d154f23f21554283c3affa2a46312,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Client
+      objectReference: {fileID: 0}
     - target: {fileID: 1778629639558133124, guid: 527d154f23f21554283c3affa2a46312,
         type: 3}
       propertyPath: m_Pivot.x
@@ -779,6 +789,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 42
+      objectReference: {fileID: 0}
+    - target: {fileID: 1778629640342350421, guid: 527d154f23f21554283c3affa2a46312,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 199686208}
+    - target: {fileID: 1778629640342350421, guid: 527d154f23f21554283c3affa2a46312,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Host
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
@@ -1010,7 +1030,7 @@ MonoBehaviour:
   ConnectionData:
     Address: 127.0.0.1
     Port: 7777
-    ServerListenAddress: 127.0.0.1
+    ServerListenAddress: 0.0.0.0
   DebugSimulator:
     PacketDelayMS: 0
     PacketJitterMS: 0
@@ -1036,7 +1056,7 @@ MonoBehaviour:
       - {fileID: 11400000, guid: 9cc4fb8d1547d1242b0eff9ad7c9d119, type: 2}
     TickRate: 30
     ClientConnectionBufferTimeout: 10
-    ConnectionApproval: 0
+    ConnectionApproval: 1
     ConnectionData: 
     EnableTimeResync: 0
     TimeResyncInterval: 30
@@ -1075,6 +1095,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7510375686771085907}
     m_Modifications:
+    - target: {fileID: 5117804263879553169, guid: d0f7fcd58e48ae34d8590c42a46659c2,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 199686208}
+    - target: {fileID: 5117804263879553169, guid: d0f7fcd58e48ae34d8590c42a46659c2,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: leaveButtonFunc
+      objectReference: {fileID: 0}
+    - target: {fileID: 5117804263879553169, guid: d0f7fcd58e48ae34d8590c42a46659c2,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: LoginManager, Assembly-CSharp
+      objectReference: {fileID: 0}
     - target: {fileID: 5117804263879553182, guid: d0f7fcd58e48ae34d8590c42a46659c2,
         type: 3}
       propertyPath: m_Pivot.x
@@ -1279,8 +1314,8 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1032655107}
   - {fileID: 1119672365}
+  - {fileID: 1032655107}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}

@@ -16,6 +16,7 @@ public class RelayManagerScript : Singleton<RelayManagerScript>
   private async void Start()
   {
     await UnityServices.InitializeAsync();
+    
     if (!AuthenticationService.Instance.IsSignedIn)
     {
       AuthenticationService.Instance.SignedIn += () =>

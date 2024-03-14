@@ -3,7 +3,9 @@ using UnityEngine;
 using Unity.Netcode;
 using TMPro;
 using Unity.Netcode.Transports.UTP;
-
+using Unity.Services.Relay;
+using Unity.Services.Relay.Models;
+using Unity.Networking.Transport.Relay;
 public class LoginManager : MonoBehaviour
 {
   public TMP_InputField userNameInputField;
@@ -131,10 +133,10 @@ public class LoginManager : MonoBehaviour
       string[] informationSplit = rawData.Split(":");
       string hostData = userNameInputField.GetComponent<TMP_InputField>().text;
       string usernameClient = informationSplit[0];
-      int passcodeClient = int.Parse(informationSplit[1]);
-      int SkinSelect = int.Parse(informationSplit[2]);
-      Debug.Log(SkinSelect);
-      isApprove = ApproveConnection(usernameClient, hostData, passcodeClient);
+      // int passcodeClient = int.Parse(informationSplit[1]);
+      int SkinSelect = int.Parse(informationSplit[1]);
+      // Debug.Log(SkinSelect);
+      isApprove = ApproveConnection(usernameClient, hostData);
       response.PlayerPrefabHash = AlternativePlayerPrefabs[SkinSelect];
     }
     else
@@ -186,7 +188,7 @@ public class LoginManager : MonoBehaviour
 
   }
 
-  public bool ApproveConnection(string clientUsername, string hostUsername, int passcode)
+  public bool ApproveConnection(string clientUsername, string hostUsername)
   {
     bool isApprove = System.String.Equals(clientUsername.Trim(), hostUsername.Trim()) ? false : true;
     return isApprove;
