@@ -4,14 +4,16 @@ using Unity.Netcode;
 using TMPro;
 using Unity.Netcode.Transports.UTP;
 using Unity.Services.Relay;
-using Unity.Services.Relay.Models;
-using Unity.Networking.Transport.Relay;
+using Unity.Services.Core;
+
+
 public class LoginManager : MonoBehaviour
 {
   public TMP_InputField userNameInputField;
   UnityTransport transport;
+  // public TMP_InputField passCodeInputField;
   public TMP_Dropdown skinSelector;
-  public List<Material> statusObjectColor;
+  // public List<Material> statusObjectColor;
   public GameObject loginPannel;
   public GameObject leaveButton;
   // public GameObject scorePanel;
@@ -19,8 +21,10 @@ public class LoginManager : MonoBehaviour
   public List<uint> AlternativePlayerPrefabs;
 
 
+
   void Start()
   {
+
     NetworkManager.Singleton.OnServerStarted += HandleServerStarted;
     NetworkManager.Singleton.OnClientConnectedCallback += HandleClientConnected;
     NetworkManager.Singleton.OnClientDisconnectCallback += HandleClientDisconnect;
@@ -92,6 +96,7 @@ public class LoginManager : MonoBehaviour
   // }
   public async void Host()
   {
+    await UnityServices.InitializeAsync();
     if (RelayManagerScript.Instance.IsRelayEnabled)
     {
       await RelayManagerScript.Instance.CreateRelay();
@@ -99,7 +104,7 @@ public class LoginManager : MonoBehaviour
     // setIpAddress();
     NetworkManager.Singleton.ConnectionApprovalCallback = ApprovalCheck;
     NetworkManager.Singleton.StartHost();
-
+    // room_id = int.Parse(passCodeInputField.GetComponent<TMP_InputField>().text);
     Debug.Log("start host");
   }
   public TMP_InputField joinCodeInputField;
@@ -133,9 +138,8 @@ public class LoginManager : MonoBehaviour
       string[] informationSplit = rawData.Split(":");
       string hostData = userNameInputField.GetComponent<TMP_InputField>().text;
       string usernameClient = informationSplit[0];
-      // int passcodeClient = int.Parse(informationSplit[1]);
       int SkinSelect = int.Parse(informationSplit[1]);
-      // Debug.Log(SkinSelect);
+      Debug.Log(SkinSelect);
       isApprove = ApproveConnection(usernameClient, hostData);
       response.PlayerPrefabHash = AlternativePlayerPrefabs[SkinSelect];
     }
@@ -216,3 +220,4 @@ public class LoginManager : MonoBehaviour
 
   }
 }
+

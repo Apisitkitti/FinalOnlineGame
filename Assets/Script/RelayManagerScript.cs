@@ -16,7 +16,7 @@ public class RelayManagerScript : Singleton<RelayManagerScript>
   private async void Start()
   {
     await UnityServices.InitializeAsync();
-    
+
     if (!AuthenticationService.Instance.IsSignedIn)
     {
       AuthenticationService.Instance.SignedIn += () =>
@@ -29,6 +29,7 @@ public class RelayManagerScript : Singleton<RelayManagerScript>
   public UnityTransport transport => NetworkManager.Singleton.GetComponent<UnityTransport>();
   public bool IsRelayEnabled =>
     transport != null && transport.Protocol == UnityTransport.ProtocolType.RelayUnityTransport;
+
 
   public async Task CreateRelay()
   {

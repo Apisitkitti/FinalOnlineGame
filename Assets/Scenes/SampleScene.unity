@@ -165,6 +165,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 150679077}
+  - component: {fileID: 150679078}
   m_Layer: 0
   m_Name: RelayManager
   m_TagString: Untagged
@@ -187,6 +188,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &150679078
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 150679076}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9655f0454af5a5448403cb62650ccf0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dontDestroy: 1
 --- !u!1 &199686207
 GameObject:
   m_ObjectHideFlags: 0
@@ -218,13 +232,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   userNameInputField: {fileID: 1119672369}
   skinSelector: {fileID: 1119672368}
-  statusObjectColor: []
   loginPannel: {fileID: 1119672367}
   leaveButton: {fileID: 1032655103}
   spawnPoint:
   - {fileID: 722961921}
   - {fileID: 1509815304}
-  AlternativePlayerPrefabs: 4dad759110057056
+  AlternativePlayerPrefabs: f98d8e101a988d29
   joinCodeInputField: {fileID: 1119672366}
   joinCode: 
 --- !u!4 &199686209
@@ -865,7 +878,7 @@ GameObject:
   - component: {fileID: 1301393708}
   - component: {fileID: 1301393707}
   - component: {fileID: 1301393706}
-  - component: {fileID: 1301393705}
+  - component: {fileID: 1301393709}
   m_Layer: 0
   m_Name: floor
   m_TagString: Untagged
@@ -873,27 +886,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!135 &1301393705
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1301393704}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &1301393706
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -959,6 +951,27 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1301393709
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1301393704}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.0000001, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1509815304
 GameObject:
   m_ObjectHideFlags: 0
@@ -1050,7 +1063,8 @@ MonoBehaviour:
   NetworkConfig:
     ProtocolVersion: 0
     NetworkTransport: {fileID: 1737829740}
-    PlayerPrefab: {fileID: 0}
+    PlayerPrefab: {fileID: 1179729112325121302, guid: 8ca258187478b034ea72423750f93e9f,
+      type: 3}
     Prefabs:
       NetworkPrefabsLists:
       - {fileID: 11400000, guid: 9cc4fb8d1547d1242b0eff9ad7c9d119, type: 2}
