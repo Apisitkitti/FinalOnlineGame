@@ -11,17 +11,13 @@ public class LoginManager : MonoBehaviour
 {
   public TMP_InputField userNameInputField;
   UnityTransport transport;
-  // public TMP_InputField passCodeInputField;
   public TMP_Dropdown skinSelector;
-  // public List<Material> statusObjectColor;
   public GameObject loginPannel;
+  public GameObject skillUi;
   public GameObject leaveButton;
   // public GameObject scorePanel;
   public List<GameObject> spawnPoint;
   public List<uint> AlternativePlayerPrefabs;
-  [SerializeField] int playerCounter = 0;
-
-
 
   void Start()
   {
@@ -36,13 +32,13 @@ public class LoginManager : MonoBehaviour
     if (isUserLogin)
     {
       loginPannel.SetActive(false);
-      // scorePanel.SetActive(true);
+      skillUi.SetActive(true);
       leaveButton.SetActive(true);
     }
     else
     {
       loginPannel.SetActive(true);
-      // scorePanel.SetActive(false);
+      skillUi.SetActive(false);
       leaveButton.SetActive(false);
     }
   }
@@ -59,7 +55,7 @@ public class LoginManager : MonoBehaviour
     Debug.Log("HandleClientConnect client ID = " + clientId);
     if (clientId == NetworkManager.Singleton.LocalClientId)
     {
-      playerCounter++;
+
       SetUIVisible(true);
     }
 
@@ -68,13 +64,13 @@ public class LoginManager : MonoBehaviour
   {
     if (NetworkManager.Singleton.IsHost)
     {
-      playerCounter = 0;
+
       NetworkManager.Singleton.Shutdown();
       NetworkManager.Singleton.ConnectionApprovalCallback -= ApprovalCheck;
     }
     else if (NetworkManager.Singleton.IsClient)
     {
-      playerCounter--;
+
       NetworkManager.Singleton.Shutdown();
     }
     SetUIVisible(false);
@@ -91,14 +87,9 @@ public class LoginManager : MonoBehaviour
     NetworkManager.Singleton.OnServerStarted -= HandleServerStarted;
     NetworkManager.Singleton.OnClientConnectedCallback -= HandleClientConnected;
     NetworkManager.Singleton.OnClientDisconnectCallback -= HandleClientDisconnect;
-    playerCounter--;
+
   }
-  // private void setIpAddress()
-  // {
-  //   transport = NetworkManager.Singleton.GetComponent<UnityTransport>();
-  //   ipAddress = ipInputField.GetComponent<TMP_InputField>().text;
-  //   transport.ConnectionData.Address = ipAddress;
-  // }
+
   public async void Host()
   {
     await UnityServices.InitializeAsync();
@@ -106,17 +97,14 @@ public class LoginManager : MonoBehaviour
     {
       await RelayManagerScript.Instance.CreateRelay();
     }
-    // setIpAddress();
     NetworkManager.Singleton.ConnectionApprovalCallback = ApprovalCheck;
     NetworkManager.Singleton.StartHost();
-    // room_id = int.Parse(passCodeInputField.GetComponent<TMP_InputField>().text);
     Debug.Log("start host");
   }
   public TMP_InputField joinCodeInputField;
   public string joinCode;
   public async void Client()
   {
-    // setIpAddress();
     joinCode = joinCodeInputField.GetComponent<TMP_InputField>().text;
     if (RelayManagerScript.Instance.IsRelayEnabled && !string.IsNullOrEmpty(joinCode))
     {
