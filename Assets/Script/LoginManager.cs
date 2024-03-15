@@ -19,6 +19,7 @@ public class LoginManager : MonoBehaviour
   // public GameObject scorePanel;
   public List<GameObject> spawnPoint;
   public List<uint> AlternativePlayerPrefabs;
+  [SerializeField] int playerCounter = 0;
 
 
 
@@ -58,6 +59,7 @@ public class LoginManager : MonoBehaviour
     Debug.Log("HandleClientConnect client ID = " + clientId);
     if (clientId == NetworkManager.Singleton.LocalClientId)
     {
+      playerCounter++;
       SetUIVisible(true);
     }
 
@@ -66,11 +68,13 @@ public class LoginManager : MonoBehaviour
   {
     if (NetworkManager.Singleton.IsHost)
     {
+      playerCounter = 0;
       NetworkManager.Singleton.Shutdown();
       NetworkManager.Singleton.ConnectionApprovalCallback -= ApprovalCheck;
     }
     else if (NetworkManager.Singleton.IsClient)
     {
+      playerCounter--;
       NetworkManager.Singleton.Shutdown();
     }
     SetUIVisible(false);
@@ -87,6 +91,7 @@ public class LoginManager : MonoBehaviour
     NetworkManager.Singleton.OnServerStarted -= HandleServerStarted;
     NetworkManager.Singleton.OnClientConnectedCallback -= HandleClientConnected;
     NetworkManager.Singleton.OnClientDisconnectCallback -= HandleClientDisconnect;
+    playerCounter--;
   }
   // private void setIpAddress()
   // {
@@ -181,7 +186,19 @@ public class LoginManager : MonoBehaviour
       spawnPos = selectSpawn.transform.position;
       spawnRo = selectSpawn.transform.rotation;
     }
-    else
+    else if (clientId == 1)
+    {
+      GameObject selectSpawn = spawnPoint[1];
+      spawnPos = selectSpawn.transform.position;
+      spawnRo = selectSpawn.transform.rotation;
+    }
+    else if (clientId == 2)
+    {
+      GameObject selectSpawn = spawnPoint[2];
+      spawnPos = selectSpawn.transform.position;
+      spawnRo = selectSpawn.transform.rotation;
+    }
+    else if (clientId == 3)
     {
       GameObject selectSpawn = spawnPoint[1];
       spawnPos = selectSpawn.transform.position;
