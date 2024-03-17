@@ -5,6 +5,7 @@ using TMPro;
 using Unity.Netcode.Transports.UTP;
 using Unity.Services.Relay;
 using Unity.Services.Core;
+using JetBrains.Annotations;
 
 
 public class LoginManager : MonoBehaviour
@@ -16,6 +17,7 @@ public class LoginManager : MonoBehaviour
   public GameObject skillUi;
   public GameObject leaveButton;
   // public GameObject scorePanel;
+  public int playerNumber;
   public List<GameObject> spawnPoint;
   public List<uint> AlternativePlayerPrefabs;
 
@@ -119,7 +121,10 @@ public class LoginManager : MonoBehaviour
   private void ApprovalCheck(NetworkManager.ConnectionApprovalRequest request, NetworkManager.ConnectionApprovalResponse response)
   {
     // The client identifier to be authenticated
-    var clientId = request.ClientNetworkId;
+    var
+    clientId = request.ClientNetworkId;
+    playerNumber = (int)clientId;
+    Debug.Log("test" + playerNumber);
 
     // Additional connection data defined by user code
     var connectionData = request.Payload;
