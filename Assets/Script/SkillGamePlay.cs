@@ -1,42 +1,45 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Unity.Netcode;
+
 
 public class SkillGamePlay : MonoBehaviour
 {
   [SerializeField] LoginManager loginManager;
-  playerSkill PlayerSkill;
-  List<playerSkill> playerSkillsOrder;
-  string carreer;
+  PlayerSkill playerSkill;
+  public List<PlayerSkill> playerSkillsOrder;
+  public string carreer;
   int clientId;
   void Start()
   {
-
     clientId = loginManager.playerNumber;
-    playerSkillsOrder = new List<playerSkill>();
+    playerSkillsOrder = new List<PlayerSkill>();
   }
   void Update()
   {
-    clientId = loginManager.playerNumber;
-    Debug.Log("test" + clientId);
+    if (clientId != loginManager.playerNumber)
+    {
+      clientId = loginManager.playerNumber;
+    }
   }
   public void Sword()
   {
     carreer = "sword";
-    PlayerSkill = new playerSkill(clientId, carreer);
-    playerSkillsOrder.Add(PlayerSkill);
+    AddCarrier(clientId, carreer);
   }
   public void Bow()
   {
     carreer = "bow";
-    PlayerSkill = new playerSkill(clientId, carreer);
-    playerSkillsOrder.Add(PlayerSkill);
+    AddCarrier(clientId, carreer);
   }
   public void Mage()
   {
     carreer = "mage";
-    PlayerSkill = new playerSkill(clientId, carreer);
-    playerSkillsOrder.Add(PlayerSkill);
+    AddCarrier(clientId, carreer);
+  }
+  private void AddCarrier(int clientId, string carreer)
+  {
+    playerSkill = new PlayerSkill(clientId, carreer);
+    playerSkillsOrder.Add(playerSkill);
   }
 }

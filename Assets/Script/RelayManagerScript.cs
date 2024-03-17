@@ -8,13 +8,16 @@ using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
 using System.Threading.Tasks;
 using System.IO;
+using TMPro;
 
 
 public class RelayManagerScript : Singleton<RelayManagerScript>
 {
 
+  [SerializeField] TMP_Text roomId;
   private async void Start()
   {
+    roomId.text = "";
     await UnityServices.InitializeAsync();
 
     if (!AuthenticationService.Instance.IsSignedIn)
@@ -37,7 +40,9 @@ public class RelayManagerScript : Singleton<RelayManagerScript>
     {
       Allocation allocation = await RelayService.Instance.CreateAllocationAsync(2);
       string joinCode = await RelayService.Instance.GetJoinCodeAsync(allocation.AllocationId);
+
       Debug.Log("Join code" + joinCode);
+      roomId.text = joinCode;
       RelayServerData relayServerData = new RelayServerData(allocation, "dtls");
       NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(relayServerData);
       // NetworkManager.Singleton.StartHost();

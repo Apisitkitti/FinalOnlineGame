@@ -7,17 +7,18 @@ using Unity.Services.Relay;
 using Unity.Services.Core;
 using JetBrains.Annotations;
 
-
 public class LoginManager : MonoBehaviour
 {
   public TMP_InputField userNameInputField;
   UnityTransport transport;
   public TMP_Dropdown skinSelector;
   public GameObject loginPannel;
+  public TMP_Text win;
   public GameObject skillUi;
   public GameObject leaveButton;
   // public GameObject scorePanel;
   public int playerNumber;
+  public TMP_Text roomID;
   public List<GameObject> spawnPoint;
   public List<uint> AlternativePlayerPrefabs;
 
@@ -66,13 +67,14 @@ public class LoginManager : MonoBehaviour
   {
     if (NetworkManager.Singleton.IsHost)
     {
-
       NetworkManager.Singleton.Shutdown();
       NetworkManager.Singleton.ConnectionApprovalCallback -= ApprovalCheck;
+      roomID.text = "";
+      win.text = "";
+      resetTextServerRPC(win.text);
     }
     else if (NetworkManager.Singleton.IsClient)
     {
-
       NetworkManager.Singleton.Shutdown();
     }
     SetUIVisible(false);
@@ -227,7 +229,11 @@ public class LoginManager : MonoBehaviour
       return 3;
     }
     return 0;
-
+  }
+  [ServerRpc(RequireOwnership = false)]
+  public void resetTextServerRPC(string text)
+  {
+    win.text = text;
   }
 }
 
