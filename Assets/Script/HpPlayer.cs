@@ -10,4 +10,29 @@ public class HpPlayer : NetworkBehaviour
 
   public NetworkVariable<int> hpP2 = new NetworkVariable<int>(10,
   NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+
+  public void PlayerHpDam(int dam)
+  {
+    if (IsOwnedByServer)
+    {
+      if (hpP1.Value > 0)
+      {
+        hpP1.Value = hpP1.Value - dam;
+      }
+      else
+      {
+
+      }
+
+    }
+    else
+    {
+      hpP2.Value = hpP2.Value - dam;
+    }
+
+  }
+  void Update()
+  {
+
+  }
 }
