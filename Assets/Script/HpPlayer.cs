@@ -21,13 +21,21 @@ public class HpPlayer : NetworkBehaviour
       }
       else
       {
-
+        
       }
 
     }
     else
     {
-      hpP2.Value = hpP2.Value - dam;
+      if (hpP1.Value > 0)
+      {
+        hpP2.Value = hpP2.Value - dam;
+      }
+      else
+      {
+
+      }
+
     }
 
   }
